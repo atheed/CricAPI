@@ -26,7 +26,7 @@ app.get('/basicBio', function(req, res) {
 
             var name, dob, name_2;
 
-            var json = {name: "", dob: "", name_2: ""};
+            var json = {name: ""};
 
             // get player's name
             $('.SubnavSubsection').filter(function() {
@@ -37,53 +37,35 @@ app.get('/basicBio', function(req, res) {
 
             var info = $('.ciPlayerinformationtxt');
 
-            // info
-            var info2 = tabletojson.convert($(info))[0];
-            console.log(info2);
-            //delete testBatting['0'];
-            //json.tests = testBatting;
+            json.fullName = $(info).get(0).children[1].next.children[0].data;
 
-            // // get player's name
-            // $('.SubnavSubsection').filter(function() {
-            //     var data = $(this);
-            //     name = data.text();
-            //     json.name = name;
-            //     json.dob = "seventh";
-            //     json.num_tests = "eighteen";
-            // });
+            json.dob = $(info).get(1).children[1].next.children[0].data.trim();
 
-            // var info = $('.ciPlayerinformationtxt');
+            json.age = $(info).get(2).children[1].next.children[0].data.trim();
 
-            // $(info).get(0).children.each(function(i, elem) {
+            // build list of teams player has played for
+            var teamsChildren = $(info).get(3).children;
+            var teams = "";
+            for (var i = 0; i <= teamsChildren.length; i++) {
+                if(i % 2 === 1 && i !== teamsChildren.length) {
+                    teams = teams + teamsChildren[i].next.children[0].data.trim() + " ";
+                }
+            }
 
-            // });
-            // console.log($(info).get(0).children.first-child);
+            json.teams = teams.trim();
 
-            // $('.ciPlayerinformationtxt').each(function(i, elem) {
-            //     console.log(elem.children.get(0).tagName)
-            // });
-            //console.log($('.ciPlayerinformationtxt').get(0).innerHTML);
-            //console.log("found");
+            json.role = $(info).get(4).children[1].next.children[0].data.trim();
 
-            // // get bio
-            // $('.ciPlayerinformationtxt').filter(function() {
-            //     var data = $(this);
-            //     name_2 = $('ciPlayerinformationtxt').eq(0).children().text()
-            //     //name_2 = data.eq(2).children().text();
-            //     json.name_7 = name_2;
-            // })
+            json.batting = $(info).get(5).children[1].next.children[0].data.trim();
+
+            json.bowling = $(info).get(6).children[1].next.children[0].data.trim();
+
         }
-        // To write to the system we will use the built in 'fs' library.
-        // In this example we will pass 3 parameters to the writeFile function
-        // Parameter 1 :  output.json - this is what the created filename will be called
-        // Parameter 2 :  JSON.stringify(json, null, 4) - the data to write, here we do an extra step by calling JSON.stringify to make our JSON easier to read
-        // Parameter 3 :  callback function - a callback function to let us know the status of our function
 
         fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
             console.log('output.json file successfully written!');
         })
 
-        // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
         res.send('Check your console!')
     })
 });
