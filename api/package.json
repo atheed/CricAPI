@@ -1,0 +1,17 @@
+{
+  "name": "cric-api",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atheed/CricAPI.git"
+  },
+  "author": "Atheed Thameem",
+  "dependencies" : {
+    "express"        : "latest",
+    "request"        : "latest",
+    "cheerio"        : "latest",
+    "tabletojson"    : "latest"
+  }
+}
