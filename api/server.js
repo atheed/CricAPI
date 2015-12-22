@@ -87,35 +87,28 @@ app.get('/battingStats', function(req, res) {
 
             var stats = $('.engineTable');
 
-            // test stats
-            var testBatting = tabletojson.convert($(stats))[0][0];
-            delete testBatting['0'];
-            json.tests = testBatting;
+            numFormats = tabletojson.convert($(stats))[0].length;
 
-            // ODI stats
-            var odiBatting = tabletojson.convert($(stats))[0][1];
-            delete odiBatting['0'];
-            json.ODIs = odiBatting;
-
-            // T20I stats
-            var t20IBatting = tabletojson.convert($(stats))[0][2];
-            delete t20IBatting['0'];
-            json.T20Is = t20IBatting;
-
-            // first-class stats
-            var fcBatting = tabletojson.convert($(stats))[0][3];
-            delete fcBatting['0'];
-            json.firstClass = fcBatting;
-
-            // List 'A' stats
-            var listABatting = tabletojson.convert($(stats))[0][4];
-            delete listABatting['0'];
-            json.listA = listABatting;
-
-            // Twenty20 stats
-            var t20Batting = tabletojson.convert($(stats))[0][5];
-            delete t20Batting['0'];
-            json.twenty20 = t20Batting;
+            for (var i = 0; i < numFormats; i++) {
+                var batting = tabletojson.convert($(stats))[0][i];
+                var format = batting['0'];
+                delete batting['0'];
+                if(format === "Tests") {
+                    json.tests = batting;
+                } else if(format === "ODIs") {
+                    json.ODIs = batting;
+                } else if(format === "T20Is") {
+                    json.T20Is = batting;
+                } else if(format === "First-class") {
+                    json.firstClass = batting;
+                } else if(format === "List A") {
+                    json.listA = batting;
+                } else if(format === "Twenty20") {
+                    json.twenty20 = batting;
+                } else {
+                    break;
+                }
+            }
         }
 
         fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
@@ -147,35 +140,28 @@ app.get('/bowlingStats', function(req, res) {
 
             var stats = $('.engineTable');
 
-            // test stats
-            var testBowling = tabletojson.convert($(stats))[1][0];
-            delete testBowling['0'];
-            json.tests = testBowling;
+            numFormats = tabletojson.convert($(stats))[1].length;
 
-            // ODI stats
-            var odiBowling = tabletojson.convert($(stats))[1][1];
-            delete odiBowling['0'];
-            json.ODIs = odiBowling;
-
-            // T20I stats
-            var t20IBowling = tabletojson.convert($(stats))[1][2];
-            delete t20IBowling['0'];
-            json.T20Is = t20IBowling;
-
-            // first-class stats
-            var fcBowling = tabletojson.convert($(stats))[1][3];
-            delete fcBowling['0'];
-            json.firstClass = fcBowling;
-
-            // List 'A' stats
-            var listABowling = tabletojson.convert($(stats))[1][4];
-            delete listABowling['0'];
-            json.listA = listABowling;
-
-            // Twenty20 stats
-            var t20Bowling = tabletojson.convert($(stats))[1][5];
-            delete t20Bowling['0'];
-            json.twenty20 = t20Bowling;
+            for (var i = 0; i < numFormats; i++) {
+                var bowling = tabletojson.convert($(stats))[1][i];
+                var format = bowling['0'];
+                delete bowling['0'];
+                if(format === "Tests") {
+                    json.tests = bowling;
+                } else if(format === "ODIs") {
+                    json.ODIs = bowling;
+                } else if(format === "T20Is") {
+                    json.T20Is = bowling;
+                } else if(format === "First-class") {
+                    json.firstClass = bowling;
+                } else if(format === "List A") {
+                    json.listA = bowling;
+                } else if(format === "Twenty20") {
+                    json.twenty20 = bowling;
+                } else {
+                    break;
+                }
+            }
         }
 
         fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
