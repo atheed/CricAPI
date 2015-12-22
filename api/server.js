@@ -1,5 +1,3 @@
-//<script src="//lightswitch05.github.io/table-to-json/javascripts/jquery.tabletojson.min.js"></script>
-
 var express = require('express');
 var fs = require('fs');
 var request = require('request');
@@ -209,6 +207,12 @@ app.get('/bowlingStats', function(req, res) {
 
 });
 
+app.get('/liveScores', function(req, res) {
+    url = 'http://static.cricinfo.com/rss/livescores.xml';
+    request(url, function(error, response, html) {
+        res.send('Check your console!');
+    });
+});
 
 app.listen('8001')
 

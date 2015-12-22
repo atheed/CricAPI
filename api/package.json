@@ -12,6 +12,7 @@
     "express"        : "latest",
     "request"        : "latest",
     "cheerio"        : "latest",
-    "tabletojson"    : "latest"
+    "tabletojson"    : "latest",
+    "xml2js"         : "latest"
   }
 }
