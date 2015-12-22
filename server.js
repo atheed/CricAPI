@@ -134,6 +134,67 @@ app.get('/battingStats', function(req, res) {
 
 });
 
+
+app.get('/bowlingStats', function(req, res) {
+    url = 'http://www.espncricinfo.com/ci/content/player/253802.html';
+
+    request(url, function(error, response, html) {
+        if(!error) {
+            var $ = cheerio.load(html);
+            var name;
+            var json = {name: ""};
+            // get player's name
+            $('.SubnavSubsection').filter(function() {
+                var data = $(this);
+                name = data.text();
+                json.name = name;
+            });
+
+            var stats = $('.engineTable');
+
+            // test stats
+            var testBowling = tabletojson.convert($(stats))[1][0];
+            delete testBowling['0'];
+            json.tests = testBowling;
+
+            // ODI stats
+            var odiBowling = tabletojson.convert($(stats))[1][1];
+            delete odiBowling['0'];
+            json.ODIs = odiBowling;
+
+            // T20I stats
+            var t20IBowling = tabletojson.convert($(stats))[1][2];
+            delete t20IBowling['0'];
+            json.T20Is = t20IBowling;
+
+            // first-class stats
+            var fcBowling = tabletojson.convert($(stats))[1][3];
+            delete fcBowling['0'];
+            json.firstClass = fcBowling;
+
+            // List 'A' stats
+            var listABowling = tabletojson.convert($(stats))[1][4];
+            delete listABowling['0'];
+            json.listA = listABowling;
+
+            // Twenty20 stats
+            var t20Bowling = tabletojson.convert($(stats))[1][5];
+            delete t20Bowling['0'];
+            json.twenty20 = t20Bowling;
+        }
+
+        fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
+            console.log('output.json file successfully written!');
+        })
+
+        // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
+        res.send('Check your console!')
+
+    });
+
+});
+
+
 app.listen('8001')
 
 console.log('Listening on port 8001');
