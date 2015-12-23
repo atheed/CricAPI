@@ -3,6 +3,7 @@ var fs = require('fs');
 var request = require('request');
 var cheerio = require('cheerio');
 var tabletojson = require('tabletojson');
+var parser = require('xml2json');
 var app = express();
 
 app.get('/basicBio', function(req, res) {
@@ -10,7 +11,7 @@ app.get('/basicBio', function(req, res) {
     // happen in
 
     // url for virat kohli -- just for testing
-    url = 'http://www.espncricinfo.com/ci/content/player/253802.html';
+    url = 'http://www.espncricinfo.com/ci/content/player/11728.html';
 
     // The structure of our request call
     // The first parameter is our URL
@@ -24,7 +25,7 @@ app.get('/basicBio', function(req, res) {
             // jQuery functionality
             var $ = cheerio.load(html);
 
-            var name, dob, name_2;
+            var name;
 
             var json = {name: ""};
 
@@ -37,28 +38,81 @@ app.get('/basicBio', function(req, res) {
 
             var info = $('.ciPlayerinformationtxt');
 
-            json.fullName = $(info).get(0).children[1].next.children[0].data;
+            var numBasicInfo = $(info).get().length;
 
-            json.dob = $(info).get(1).children[1].next.children[0].data.trim();
-
-            json.age = $(info).get(2).children[1].next.children[0].data.trim();
-
-            // build list of teams player has played for
-            var teamsChildren = $(info).get(3).children;
-            var teams = "";
-            for (var i = 0; i <= teamsChildren.length; i++) {
-                if(i % 2 === 1 && i !== teamsChildren.length) {
-                    teams = teams + teamsChildren[i].next.children[0].data.trim() + " ";
+            for(var index = 0; i < numBasicInfo; i++) {
+                var label = $(info).get(index).children[0].children[0].data.trim();
+                console.log(label);
+                if (label === 'Full Name') {
+                    json.fullName = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Born') {
+                    json.dob = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Current age') {
+                    json.age = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Major teams') {
+                    var teamsChildren = $(info).get(index).children;
+                    var teams = "";
+                    for (var i = 0; i <= teamsChildren.length; i++) {
+                        if(i % 2 === 1 && i !== teamsChildren.length) {
+                            teams = teams + teamsChildren[i].next.children[0].data.trim() + " ";
+                        }
+                    } 
+                    json.teams = teams.trim();
+                } else if (label === 'Nickname') {
+                    var nicknamesChildren = $(info).get(index).children;
+                    var nicknames = "";
+                    for (var i = 0; i <= nicknamesChildren.length; i++) {
+                        if(i % 2 === 1 && i !== nicknamesChildren.length) {
+                            nicknames = nicknames + nicknamesChildren[i].next.children[0].data.trim() + " ";
+                        }
+                    }
+                    json.nicknames = nicknames.trim(); 
+                } else if (label === 'Playing role') {
+                    json.role = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Batting style') {
+                    json.batting = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Bowling style') {
+                    json.bowling = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Height') {
+                    json.playerHeight = $(info).get(index).children[1].next.children[0].data.trim();
+                } else if (label === 'Education') {
+                    json.education = $(info).get(index).children[1].next.children[0].data.trim();
+                } else {
+                    continue;
                 }
             }
+            // json.teams = teams.trim();
+            //     }
 
-            json.teams = teams.trim();
+            //     var info = $(info).get(i).children[1].next.children[0].data.trim();
+            //     console.log(i);
+            // }
+            //var i = 2;
+            //console.log($(info).get(i).children[0].children[0].data.trim());
+            //console.log($(info).get(1).children[0].children[0].data.trim());
 
-            json.role = $(info).get(4).children[1].next.children[0].data.trim();
+            //json.fullName = $(info).get(0).children[1].next.children[0].data;
 
-            json.batting = $(info).get(5).children[1].next.children[0].data.trim();
+            //json.dob = $(info).get(1).children[1].next.children[0].data.trim();
 
-            json.bowling = $(info).get(6).children[1].next.children[0].data.trim();
+            // json.age = $(info).get(2).children[1].next.children[0].data.trim();
+
+            // build list of teams player has played for
+            // var teamsChildren = $(info).get(3).children;
+            // var teams = "";
+            // for (var i = 0; i <= teamsChildren.length; i++) {
+            //     if(i % 2 === 1 && i !== teamsChildren.length) {
+            //         teams = teams + teamsChildren[i].next.children[0].data.trim() + " ";
+            //     }
+            // }
+
+            // json.teams = teams.trim();
+
+            // json.role = $(info).get(4).children[1].next.children[0].data.trim();
+
+            // json.batting = $(info).get(5).children[1].next.children[0].data.trim();
+
+            // json.bowling = $(info).get(6).children[1].next.children[0].data.trim();
 
         }
 
@@ -178,6 +232,8 @@ app.get('/bowlingStats', function(req, res) {
 app.get('/liveScores', function(req, res) {
     url = 'http://static.cricinfo.com/rss/livescores.xml';
     request(url, function(error, response, html) {
+        var json = parser.toJson(url); //returns a string containing the JSON structure by default
+        console.log(json);
         res.send('Check your console!');
     });
 });

@@ -9,10 +9,10 @@
   },
   "author": "Atheed Thameem",
   "dependencies" : {
-    "express"        : "latest",
-    "request"        : "latest",
-    "cheerio"        : "latest",
-    "tabletojson"    : "latest",
-    "xml2js"         : "latest"
+    "express"          : "latest",
+    "request"          : "latest",
+    "cheerio"          : "latest",
+    "tabletojson"      : "latest",
+    "xml2json"         : "latest"
   }
 }
