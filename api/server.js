@@ -12,6 +12,7 @@ app.get('/basicBio', function(req, res) {
 
     // url for virat kohli -- just for testing
     url = 'http://www.espncricinfo.com/ci/content/player/11728.html';
+    //console.log(req.body.pid);
 
     // The structure of our request call
     // The first parameter is our URL
@@ -80,46 +81,14 @@ app.get('/basicBio', function(req, res) {
                     continue;
                 }
             }
-            // json.teams = teams.trim();
-            //     }
-
-            //     var info = $(info).get(i).children[1].next.children[0].data.trim();
-            //     console.log(i);
-            // }
-            //var i = 2;
-            //console.log($(info).get(i).children[0].children[0].data.trim());
-            //console.log($(info).get(1).children[0].children[0].data.trim());
-
-            //json.fullName = $(info).get(0).children[1].next.children[0].data;
-
-            //json.dob = $(info).get(1).children[1].next.children[0].data.trim();
-
-            // json.age = $(info).get(2).children[1].next.children[0].data.trim();
-
-            // build list of teams player has played for
-            // var teamsChildren = $(info).get(3).children;
-            // var teams = "";
-            // for (var i = 0; i <= teamsChildren.length; i++) {
-            //     if(i % 2 === 1 && i !== teamsChildren.length) {
-            //         teams = teams + teamsChildren[i].next.children[0].data.trim() + " ";
-            //     }
-            // }
-
-            // json.teams = teams.trim();
-
-            // json.role = $(info).get(4).children[1].next.children[0].data.trim();
-
-            // json.batting = $(info).get(5).children[1].next.children[0].data.trim();
-
-            // json.bowling = $(info).get(6).children[1].next.children[0].data.trim();
-
         }
 
-        fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-            console.log('output.json file successfully written!');
-        })
+        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
+        //     console.log('output.json file successfully written!');
+        // })
 
-        res.send('Check your console!')
+        // send JSON response
+        res.send(json);
     })
 });
 
@@ -164,12 +133,12 @@ app.get('/battingStats', function(req, res) {
             }
         }
 
-        fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-            console.log('output.json file successfully written!');
-        })
+        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
+        //     console.log('output.json file successfully written!');
+        // })
 
-        // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
-        res.send('Check your console!')
+        // send JSON response
+        res.send(json);
 
     });
 
@@ -217,12 +186,12 @@ app.get('/bowlingStats', function(req, res) {
             }
         }
 
-        fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-            console.log('output.json file successfully written!');
-        })
+        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
+        //     console.log('output.json file successfully written!');
+        // })
 
-        // Finally, we'll just send out a message to the browser reminding you that this app does not have a UI.
-        res.send('Check your console!')
+        // send JSON response
+        res.send(json);
 
     });
 
