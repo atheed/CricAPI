@@ -40,9 +40,8 @@ app.get('/basicBio', function(req, res) {
 
             var numBasicInfo = $(info).get().length;
 
-            for(var index = 0; i < numBasicInfo; i++) {
+            for(var index = 0; index < numBasicInfo; index++) {
                 var label = $(info).get(index).children[0].children[0].data.trim();
-                console.log(label);
                 if (label === 'Full Name') {
                     json.fullName = $(info).get(index).children[1].next.children[0].data.trim();
                 } else if (label === 'Born') {
