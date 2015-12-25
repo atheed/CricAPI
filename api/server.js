@@ -6,20 +6,19 @@ var tabletojson = require('tabletojson');
 var parser = require('xml2json');
 var app = express();
 
-app.get('/basicBio', function(req, res) {
+app.get('/basicBio/:pid', function (req, res) {
     // the function that some information retrieval will
     // happen in
 
-    // url for virat kohli -- just for testing
-    url = 'http://www.espncricinfo.com/ci/content/player/11728.html';
-    //console.log(req.body.pid);
+    // url, with Cricinfo player ID
+    url = 'http://www.espncricinfo.com/ci/content/player/' + req.params.pid + '.html';
 
     // The structure of our request call
     // The first parameter is our URL
     // The callback function takes 3 parameters:
     // an error, response status code, and the html
 
-    request(url, function(error, response, html) {
+    request(url, function (error, response, html) {
         // checking no errors occurred when request was made
         if(!error) {
             // use cheerio library on the returned html -- essentially gives us
@@ -43,7 +42,7 @@ app.get('/basicBio', function(req, res) {
 
             for(var index = 0; index < numBasicInfo; index++) {
                 var label = $(info).get(index).children[0].children[0].data.trim();
-                if (label === 'Full Name') {
+                if (label === 'Full name') {
                     json.fullName = $(info).get(index).children[1].next.children[0].data.trim();
                 } else if (label === 'Born') {
                     json.dob = $(info).get(index).children[1].next.children[0].data.trim();
@@ -83,17 +82,15 @@ app.get('/basicBio', function(req, res) {
             }
         }
 
-        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-        //     console.log('output.json file successfully written!');
-        // })
-
         // send JSON response
         res.send(json);
     })
 });
 
-app.get('/battingStats', function(req, res) {
-    url = 'http://www.espncricinfo.com/ci/content/player/253802.html';
+app.get('/battingStats/:pid', function (req, res) {
+
+    // url, with Cricinfo player ID
+    url = 'http://www.espncricinfo.com/ci/content/player/' + req.params.pid + '.html';
 
     request(url, function(error, response, html) {
         if(!error) {
@@ -133,10 +130,6 @@ app.get('/battingStats', function(req, res) {
             }
         }
 
-        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-        //     console.log('output.json file successfully written!');
-        // })
-
         // send JSON response
         res.send(json);
 
@@ -145,8 +138,10 @@ app.get('/battingStats', function(req, res) {
 });
 
 
-app.get('/bowlingStats', function(req, res) {
-    url = 'http://www.espncricinfo.com/ci/content/player/253802.html';
+app.get('/bowlingStats/:pid', function (req, res) {
+
+    // url, with Cricinfo player ID
+    url = 'http://www.espncricinfo.com/ci/content/player/' + req.params.pid + '.html';
 
     request(url, function(error, response, html) {
         if(!error) {
@@ -186,10 +181,6 @@ app.get('/bowlingStats', function(req, res) {
             }
         }
 
-        // fs.writeFile('output.json', JSON.stringify(json, null, 4), function(err){ 
-        //     console.log('output.json file successfully written!');
-        // })
-
         // send JSON response
         res.send(json);
 
@@ -197,9 +188,9 @@ app.get('/bowlingStats', function(req, res) {
 
 });
 
-app.get('/liveScores', function(req, res) {
+app.get('/liveScores', function (req, res) {
     url = 'http://static.cricinfo.com/rss/livescores.xml';
-    request(url, function(error, response, html) {
+    request(url, function (error, response, html) {
         var json = parser.toJson(url); //returns a string containing the JSON structure by default
         console.log(json);
         res.send('Check your console!');
