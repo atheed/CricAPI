@@ -277,4 +277,4 @@ Finally, for a `/bowlingStats` GET call for player `19296`, we will receive a re
 (**Note:** There may be varying amounts of information for any of these REST calls, depending on how much information is available to Cricinfo for a given player)
 
 ##License
-[MIT License](https://opensource.org/licenses/MIT)
+[MIT License](LICENSE.md)
